@@ -16,3 +16,12 @@ class AvlRouterTree:
 
     def _get_balance(self, node):
         return self._get_height(node.left) - self._get_height(node.right) if node else 0
+
+    def rotate_right(self, y):
+        x = y.left
+        T2 = x.right
+        x.right = y
+        y.left = T2
+        y.height = 1 + max(self._get_height(y.left), self._get_height(y.right))
+        x.height = 1 + max(self._get_height(x.left), self._get_height(x.right))
+        return x
