@@ -20,8 +20,27 @@ class AvlRouterTree:
     def rotate_right(self, y):
         x = y.left
         T2 = x.right
+
         x.right = y
         y.left = T2
+
         y.height = 1 + max(self._get_height(y.left), self._get_height(y.right))
         x.height = 1 + max(self._get_height(x.left), self._get_height(x.right))
+
         return x
+    def rotate_left(self, y):
+        x = y.right
+        T2 = x.left
+        x.left = y
+        y.right = T2
+        y.height = 1 + max(self._get_height(y.left),  self._get_height(y.right))
+        x.height = 1 + max(self._get_height(x.left), self._get_height(x.right))
+        return x
+
+    def insert(self, root, key):
+        if not root:
+            return AVLNode(key)
+        elif key < root.key:
+            root.left = self.rotate_right(root.left, key)
+        else:
+            root.right = self.rotate_left(root.right, key)
