@@ -41,6 +41,11 @@ class AvlRouterTree:
         if not root:
             return AVLNode(key)
         elif key < root.key:
-            root.left = self.rotate_right(root.left, key)
+            root.left = self.insert(root.left, key)
         else:
-            root.right = self.rotate_left(root.right, key)
+            root.right = self.insert(root.right, key)
+        root.height = 1 + max(self._get_height(root.left), self._get_height(root.right))
+
+        #Logica de rebalanceamento aqui
+
+        return root
