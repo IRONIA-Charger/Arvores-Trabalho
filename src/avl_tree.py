@@ -1,5 +1,4 @@
 from packet_rule import PacketRule
-
 class AVLNode:
     def __init__(self, rule: PacketRule):
         self.rule = rule
@@ -81,7 +80,54 @@ class AvlRouterTree:
             return self.rotate_left(root)
 
         return root
+    def delete_rule(self, id_rule: int):
+        self.root = self._delete(self.root, id_rule)
+    def _get_min_value_node(self, node):
+        current = node
+        while current.left is not None:
+            current = current.left
+        return current
+    def _delete(self, root, id_rule:int):
+        if not root:
+            return root
+        if id_rule < root.rule.id_rule:
+            root.left = self._delete(root.left, id_rule)
+        elif id_rule > root.rule.id_rule:
+            root.right = self._delete(root.right, id_rule)
+        else:
 
+            if root.left is None:
+                temp = root.right
+                root = None
+                return temp
+            elif root.right is None:
+                temp = root.left
+                root = None
+                return temp
+            temp = self._get_min_value_node(root.right)
+
+            root.rule = temp.rule
+
+            root.right = self._delete(root.right, temp.rule.id_rule)
+        if root is None:
+            return root
+        root.height = 1 + max(self._get_height(root.left), self._get_height(root.right))
+        balance = self._get_balance(root)
+
+        if balance > 1 and self._get_balance(root.left) >= 0:
+           return self.rotate_right(root)
+
+        if balance > 1 and self._get_balance(root.left) < 0:
+            root.left = self.rotate_left(root.left)
+            return self.rotate_right(root)
+
+        if balance < -1 and self._get_balance(root.right) <= 0:
+            return self.rotate_left(root)
+
+        if balance < -1 and self._get_balance(root.right) > 0:
+            root.right = self.rotate_right(root.right)
+            return self.rotate_left(root)
+        return root
     def display_tree(self, node=None, level=0):
         if not node:
             node = self.root
