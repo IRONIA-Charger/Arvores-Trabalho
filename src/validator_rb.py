@@ -36,10 +36,6 @@ def validate_rbt_compact(tree_obj: RedBlackRouterTree):
     is_valid = dfs(tree_obj.root, 0, 1)
     return is_valid, max_height, (expected_black_height if expected_black_height else 0)
 
-
-# =============================================================================
-# EXECUÇÃO COMPACTA (SEED 42)
-# =============================================================================
 if __name__ == "__main__":
     random.seed(42)
     print("=" * 55)
